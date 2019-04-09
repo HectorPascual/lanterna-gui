@@ -11,5 +11,5 @@ java -cp ".:lanterna-3.0.1.jar" <ClassName>.java
 
 ```
 
-*Currently ClassName is FirstGUI
+*Currently ClassName is FirstGUI*
 
