@@ -77,6 +77,8 @@ public class FirstGUI {
 
             requestName();
 
+            KeyStrokeListener listener = new KeyStrokeListener(this);
+            window.addWindowListener(listener);
             window.setComponent(absolutPanel);
             textGUI.addWindowAndWait(window);
 
@@ -118,6 +120,10 @@ public class FirstGUI {
         chatContent.setText(tmp);
     }
 
+    public void close(){
+        window.close();
+        System.exit(0); //exits the process
+    }
 
     public void updateUserList(List<String> usersList){
         String tmp = "";
