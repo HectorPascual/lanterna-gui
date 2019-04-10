@@ -5,9 +5,14 @@
 
 In order to compile and run the code it must be done with the following commands :
 
-1. A server must be started before running the client
+1. A server instance must be started before running the client
+```
+cd server
+javac Server.java MyServerSocket.java MySocket.java
+java Server
+```
 
-2. Compile and then run
+2. Compile the client and then run it
 
 ```
 cd src
