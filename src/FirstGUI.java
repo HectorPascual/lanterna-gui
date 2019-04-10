@@ -7,7 +7,7 @@ import com.googlecode.lanterna.gui2.*;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
 import com.googlecode.lanterna.gui2.dialogs.TextInputDialog;
-import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.input.*;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.Terminal;
@@ -37,6 +37,8 @@ public class FirstGUI {
     private String name;
     private int termColumns;
     private int termRows;
+    private KeyStroke keyStroke;
+    private Button exit;
 
     public FirstGUI(MySocket socket){
         this.socket = socket;
@@ -48,9 +50,9 @@ public class FirstGUI {
         try {
 
             term = new UnixTerminal();
-
             termColumns = term.getTerminalSize().getColumns();
             termRows = term.getTerminalSize().getRows();
+
             screen = new TerminalScreen(term);
             screen.startScreen();
 
@@ -82,16 +84,52 @@ public class FirstGUI {
 
         } finally {
             try {
-                term.close();
+                screen.stopScreen();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
+    public void checkKeys(){
+
+        Thread readKeys = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    while (true) {
+
+                        keyStroke = screen.pollInput();
+                        if (keyStroke != null && keyStroke.getKeyType() == KeyType.Escape) {
+                            window.close();
+                            System.exit(0); //exits the process
+                        }
+                    }
+                }catch(IOException e){
+
+                }
+            }
+        });
+        readKeys.start();
+
+    }
+
     public void write(String txt){
         String tmp = chatContent.getText() + '\n' + txt;
         chatContent.setText(tmp);
+    }
+
+
+    public void updateUserList(List<String> usersList){
+        String tmp = "";
+        for(String s : usersList){
+            tmp = tmp + s + '\n';
+        }
+        users.setText(tmp);
+    }
+
+    private void requestName() {
+        name = TextInputDialog.showDialog(textGUI, "","Type your name (max 8 letters)","");
+        socket.write(name);
     }
 
     private void sizeComponents(){
@@ -107,30 +145,26 @@ public class FirstGUI {
         textBox.setPosition(new TerminalPosition(0, termRows*64/100));
         textBox.setSize(new TerminalSize(termColumns*79/100, termRows*50/100));
 
-        send.setPosition(new TerminalPosition(termColumns*83/100, termRows*70/100));
+        send.setPosition(new TerminalPosition(termColumns*85/100, termRows*70/100));
         send.setSize(new TerminalSize(8, 1));
+
+        exit.setPosition(new TerminalPosition(termColumns*85/100, termRows*80/100));
+        exit.setSize(new TerminalSize(8, 1));
 
     }
     private void initComponents(){
-
         try {
-
             users = new Label("");
-
 
             chatContent = new Label("");
             chatContent.setPosition(new TerminalPosition(1, 0));
             chatContent.setSize(term.getTerminalSize());
 
-
             separatorHor = new Separator(Direction.HORIZONTAL);
-
 
             separatorVert = new Separator(Direction.VERTICAL);
 
-
             textBox = new TextBox();
-
 
             send = new Button("Send", new Runnable() {
                 @Override
@@ -138,6 +172,15 @@ public class FirstGUI {
                     sendAction();
                 }
             });
+
+            exit = new Button("Exit", new Runnable() {
+                @Override
+                public void run() {
+                    window.close();
+                    System.exit(0);
+                }
+            });
+
         } catch (IOException e){
 
         }
@@ -154,24 +197,12 @@ public class FirstGUI {
             absolutPanel.addComponent(separatorVert);
             absolutPanel.addComponent(textBox);
             absolutPanel.addComponent(send);
+            absolutPanel.addComponent(exit);
         } catch (IOException e){
 
         }
     }
 
-
-    private void requestName() {
-        name = TextInputDialog.showDialog(textGUI, "","Type your name (max 8 letters)","");
-        socket.write(name);
-    }
-
-    public void updateUserList(List<String> usersList){
-        String tmp = "";
-        for(String s : usersList){
-            tmp = tmp + s + '\n';
-        }
-        users.setText(tmp);
-    }
 
     private void sendAction(){
         socket.write(textBox.getText());

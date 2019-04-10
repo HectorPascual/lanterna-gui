@@ -76,7 +76,9 @@ public class TestGUI03 {
                     }).setLayoutData(
                             GridLayout.createHorizontallyEndAlignedLayoutData(2)));
 
-
+            while(screen.pollInput() != KeyType.Escape){
+                window.close()
+            }
             window.setComponent(contentPanel);
             textGUI.addWindowAndWait(window);
            // textGUI.addWindowAndWait(window2);
@@ -88,7 +90,7 @@ public class TestGUI03 {
 
         } finally {
             try {
-                term.close();
+                screen.stopScreen();
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -21,21 +21,7 @@ public class Client{
 
         guiThread.start();
 
-        /*Thread t1 = new Thread(new Runnable(){
-            public void run() {
-                try{
-                    String line;
-                    while((line = in.readLine()) != null){
-                        client.write(line);
-                    }
-                } catch(IOException ex){
-                }
-                client.shutdownInput();
-            }
-        });
-        t1.start();*/
-
-        Thread t2 = new Thread(new Runnable() {
+        Thread readThread = new Thread(new Runnable() {
             public void run() {
                 String line;
                 while((line = client.read()) != null){
@@ -50,7 +36,7 @@ public class Client{
                 client.close();
             }
         });
-        t2.start();
+        readThread.start();
 
     }
 }
