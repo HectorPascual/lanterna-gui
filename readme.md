@@ -16,7 +16,7 @@ java Server
 
 ```
 cd src
-javac -cp ".:../libs/lanterna-3.0.1.jar" FirstGUI.java Client.java MySocket.java
+javac -cp ".:../libs/lanterna-3.0.1.jar" FirstGUI.java Client.java MySocket.java KeyStrokeListener.java
 java -cp ".:../libs/lanterna-3.0.1.jar" Client
 
 ```
