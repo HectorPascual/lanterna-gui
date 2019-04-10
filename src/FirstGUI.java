@@ -138,58 +138,55 @@ public class FirstGUI {
         socket.write(name);
     }
 
-    private void sizeComponents(){
+    private void sizeComponents() {
         users.setPosition(new TerminalPosition(termColumns*82/100, 0));
         users.setSize(new TerminalSize(8, termRows));
 
         separatorHor.setSize(new TerminalSize(termColumns, 1));
-        separatorHor.setPosition(new TerminalPosition(0, termRows*60/100));
+        separatorHor.setPosition(new TerminalPosition(0, termRows*76/100));
+
+        chatContent.setPosition(new TerminalPosition(1, 0));
+        chatContent.setSize(new TerminalSize(termColumns,termRows));
 
         separatorVert.setSize(new TerminalSize(1, termRows));
         separatorVert.setPosition(new TerminalPosition(termColumns*80/100, 0));
 
-        textBox.setPosition(new TerminalPosition(0, termRows*64/100));
+        textBox.setPosition(new TerminalPosition(0, termRows*80/100));
         textBox.setSize(new TerminalSize(termColumns*79/100, termRows*50/100));
 
-        send.setPosition(new TerminalPosition(termColumns*85/100, termRows*70/100));
+        send.setPosition(new TerminalPosition(termColumns*85/100, termRows*80/100));
         send.setSize(new TerminalSize(8, 1));
 
-        exit.setPosition(new TerminalPosition(termColumns*85/100, termRows*80/100));
+        exit.setPosition(new TerminalPosition(termColumns*85/100, termRows*85/100));
         exit.setSize(new TerminalSize(8, 1));
 
     }
     private void initComponents(){
-        try {
-            users = new Label("");
+        users = new Label("");
 
-            chatContent = new Label("");
-            chatContent.setPosition(new TerminalPosition(1, 0));
-            chatContent.setSize(term.getTerminalSize());
+        chatContent = new Label("");
 
-            separatorHor = new Separator(Direction.HORIZONTAL);
+        separatorHor = new Separator(Direction.HORIZONTAL);
 
-            separatorVert = new Separator(Direction.VERTICAL);
+        separatorVert = new Separator(Direction.VERTICAL);
 
-            textBox = new TextBox();
+        textBox = new TextBox();
 
-            send = new Button("Send", new Runnable() {
-                @Override
-                public void run() {
-                    sendAction();
-                }
-            });
+        send = new Button("Send", new Runnable() {
+            @Override
+            public void run() {
+                if(countLines() == termRows*64/100) chatContent.setText("");
+                sendAction();
+            }
+        });
 
-            exit = new Button("Exit", new Runnable() {
-                @Override
-                public void run() {
-                    window.close();
-                    System.exit(0);
-                }
-            });
-
-        } catch (IOException e){
-
-        }
+        exit = new Button("Exit", new Runnable() {
+            @Override
+            public void run() {
+                window.close();
+                System.exit(0);
+            }
+        });
     }
 
     private void initPanel(){
@@ -209,6 +206,13 @@ public class FirstGUI {
         }
     }
 
+    //Utility to clear screen
+    private int countLines(){
+        String txt = chatContent.getText();
+        String[] array = txt.split("\n");
+        return array.length+1;
+    }
+
 
     private void sendAction(){
         socket.write(textBox.getText());
@@ -216,5 +220,6 @@ public class FirstGUI {
         textBox.setText("");
         write(input);
     }
+
 
 }
