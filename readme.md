@@ -10,8 +10,8 @@ In order to compile and run the code it must be done with the following commands
 2. Compile and then run
 
 ```
-javac -cp ".:lanterna-3.0.1.jar" FirstGUI.java Client.java
-java -cp ".:lanterna-3.0.1.jar" Client
+cd src
+javac -cp ".:../libs/lanterna-3.0.1.jar" FirstGUI.java Client.java MySocket.java
+java -cp ".:../libs/lanterna-3.0.1.jar" Client
 
 ```
-
