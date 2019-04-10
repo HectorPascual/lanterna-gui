@@ -1,5 +1,8 @@
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Client{
 
@@ -36,7 +39,13 @@ public class Client{
             public void run() {
                 String line;
                 while((line = client.read()) != null){
-                    gui.write(line);
+                    if(line.contains("$userlist")){ // kind of commands to interact with the server
+                        List<String> users = new ArrayList<String>(Arrays.asList(line.split(",")));
+                        users.remove(0);
+                        gui.updateUserList(users);
+                    }else {
+                        gui.write(line);
+                    }
                 }
                 client.close();
             }

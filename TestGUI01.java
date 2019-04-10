@@ -43,9 +43,10 @@ public class TestGUI01 {
             textGraphics1.putString(0,0,"hola");
             term.setCursorPosition(0,0);
             term.flush();
-            keyStroke = term.readInput();
+            keyStroke = term.pollInput();
             while(keyStroke.getKeyType() != KeyType.Escape){
-                keyStroke = term.readInput();
+                keyStroke = term.pollInput();
+
             }
 
             //exit
