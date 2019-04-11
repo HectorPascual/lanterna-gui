@@ -175,7 +175,7 @@ public class FirstGUI {
         send = new Button("Send", new Runnable() {
             @Override
             public void run() {
-                if(countLines() == termRows*64/100) chatContent.setText("");
+                if(countLines() == termRows*76/100) chatContent.setText("");
                 sendAction();
             }
         });
@@ -220,6 +220,4 @@ public class FirstGUI {
         textBox.setText("");
         write(input);
     }
-
-
 }
