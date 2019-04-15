@@ -11,49 +11,52 @@ public class Server{
 
     while(true){
       MySocket client = new MySocket(server.accept());
-      final String name;
+
+      //final String username;
       if(client != null){
-        String username;
-        while(true){
-          username = client.read();
-          if(!users.containsKey(username)){
-            name = username;
-            users.put(name,client);
-
-            //Update userlist each time a user joins succesfully
-            String userlist = "$userlist,";
-            for(String s : users.keySet()){
-              userlist = userlist + s + ",";
-            }
-            for(MySocket s : users.values()){
-              s.write(userlist);
-              if(s != users.get(name)){
-                s.write(name + " has join the chat");
-              }
-            }
-            break;
-          }
-          client.write("Nick already taken. Introduce another name");
-          // it should not change the gui
-        }
-
-        Thread t1 = new Thread(new Runnable(){
+        Thread t1 = new Thread(new Runnable(){ // Everything inside a thread in order to make each user input independent
           public void run(){
+
+            // Name request part
+            String username;
+            while(true){
+              username = client.read();
+              if(!users.containsKey(username)){
+                users.put(username,client);
+
+                //Update userlist each time a user joins succesfully
+                String userlist = "$userlist,";
+                for(String s : users.keySet()){
+                  userlist = userlist + s + ",";
+                }
+                for(MySocket s : users.values()){
+                  s.write(userlist);
+                  if(s != users.get(username)){
+                    s.write(username + " has join the chat");
+                  }
+                }
+                break;
+              }
+              client.write("Nick already taken. Introduce another username");
+              // it should not change the gui
+            }
+
+            // Continuous reading
             String line;
             while(true){
-              if((line = users.get(name).read()) != null){
+              if((line = users.get(username).read()) != null){
                 for(String s : users.keySet()){
-                  if(s != name) users.get(s).write(name + ": " + line);
+                  if(s != username) users.get(s).write(username + ": " + line);
                 }
               } else {
                 String modifyUsers = "$userlist,";
                 for(String s : users.keySet()){
-                  if(s != name){
+                  if(s != username){
                     modifyUsers = modifyUsers + s + ",";
-                    users.get(s).write(name + " has left the chat");
+                    users.get(s).write(username + " has left the chat");
                   }
                 }
-                users.remove(name);
+                users.remove(username);
                 for(MySocket s : users.values()){
                   System.out.println(modifyUsers);
                   s.write(modifyUsers);

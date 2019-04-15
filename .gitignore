@@ -1,3 +1,5 @@
 *.class
 src/*.class
 server/*.class
+
+\.idea/
