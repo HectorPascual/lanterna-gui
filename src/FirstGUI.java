@@ -128,7 +128,7 @@ public class FirstGUI {
     public void updateUserList(List<String> usersList){
         String tmp = "";
         for(String s : usersList){
-            tmp = tmp + s + '\n';
+          tmp = tmp + s + '\n';
         }
         users.setText(tmp);
     }

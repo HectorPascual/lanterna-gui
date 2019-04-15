@@ -27,11 +27,14 @@ public class Server{
             }
             for(MySocket s : users.values()){
               s.write(userlist);
+              if(s != users.get(name)){
+                s.write(name + " has join the chat");
+              }
             }
-
             break;
           }
-          client.write("Nick already taken");
+          client.write("Nick already taken. Introduce another name");
+          // it should not change the gui
         }
 
         Thread t1 = new Thread(new Runnable(){
@@ -39,9 +42,23 @@ public class Server{
             String line;
             while(true){
               if((line = users.get(name).read()) != null){
-                for(String s : users.keySet()){               //maybe a method because we use it more than once
+                for(String s : users.keySet()){
                   if(s != name) users.get(s).write(name + ": " + line);
                 }
+              } else {
+                String modifyUsers = "$userlist,";
+                for(String s : users.keySet()){
+                  if(s != name){
+                    modifyUsers = modifyUsers + s + ",";
+                    users.get(s).write(name + " has left the chat");
+                  }
+                }
+                users.remove(name);
+                for(MySocket s : users.values()){
+                  System.out.println(modifyUsers);
+                  s.write(modifyUsers);
+                }
+                break;
               }
             }
           }
