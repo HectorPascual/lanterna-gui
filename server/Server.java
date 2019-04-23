@@ -32,6 +32,7 @@ public class Server{
                 for(MySocket s : users.values()){
                   s.write(userlist);
                   if(s != users.get(username)){
+                    System.out.println("Sending " + username + "has join the chat to" + s.toString());
                     s.write(username + " has join the chat");
                   }
                 }

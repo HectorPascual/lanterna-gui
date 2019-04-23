@@ -116,6 +116,7 @@ public class FirstGUI {
     }
 
     public void write(String txt){
+        if(countLines() >= termRows*76/100) chatContent.setText("");
         String tmp = chatContent.getText() + '\n' + txt;
         chatContent.setText(tmp);
     }
@@ -146,13 +147,13 @@ public class FirstGUI {
         separatorHor.setPosition(new TerminalPosition(0, termRows*76/100));
 
         chatContent.setPosition(new TerminalPosition(1, 0));
-        chatContent.setSize(new TerminalSize(termColumns,termRows));
+        chatContent.setSize(new TerminalSize(termColumns*78/100,termRows*75/100));
 
         separatorVert.setSize(new TerminalSize(1, termRows));
         separatorVert.setPosition(new TerminalPosition(termColumns*80/100, 0));
 
         textBox.setPosition(new TerminalPosition(0, termRows*80/100));
-        textBox.setSize(new TerminalSize(termColumns*79/100, termRows*50/100));
+        textBox.setSize(new TerminalSize(termColumns*79/100, termRows*15/100));
 
         send.setPosition(new TerminalPosition(termColumns*85/100, termRows*80/100));
         send.setSize(new TerminalSize(8, 1));
@@ -170,12 +171,11 @@ public class FirstGUI {
 
         separatorVert = new Separator(Direction.VERTICAL);
 
-        textBox = new TextBox();
+        textBox = new TextBox("", TextBox.Style.MULTI_LINE);
 
         send = new Button("Send", new Runnable() {
             @Override
             public void run() {
-                if(countLines() == termRows*76/100) chatContent.setText("");
                 sendAction();
             }
         });
@@ -193,7 +193,6 @@ public class FirstGUI {
         try {
             absolutPanel = new Panel(new AbsoluteLayout());
             absolutPanel.setPreferredSize(new TerminalSize(term.getTerminalSize().getColumns(), term.getTerminalSize().getRows()));
-
             absolutPanel.addComponent(users);
             absolutPanel.addComponent(chatContent);
             absolutPanel.addComponent(separatorHor);
@@ -215,9 +214,12 @@ public class FirstGUI {
 
 
     private void sendAction(){
-        socket.write(textBox.getText());
         String input = textBox.getText();
-        textBox.setText("");
-        write(input);
+        if(!input.equals("")) {
+            socket.write(input);
+            textBox.setText("");
+            write(input);
+
+        }
     }
 }
