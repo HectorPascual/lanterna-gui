@@ -10,12 +10,12 @@ public class KeyStrokeListener implements WindowListener {
 
     private FirstGUI gui;
 
-    public KeyStrokeListener(FirstGUI gui){
+    public KeyStrokeListener(FirstGUI gui) {
         this.gui = gui;
     }
 
     public void onInput(Window basePane, KeyStroke keyStroke, AtomicBoolean deliverEvent) {
-        if(keyStroke.getKeyType() == KeyType.Escape){
+        if (keyStroke.getKeyType() == KeyType.Escape) {
             gui.close();
         }
     }
