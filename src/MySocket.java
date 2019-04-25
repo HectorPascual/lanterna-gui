@@ -49,7 +49,23 @@ public class MySocket{
     public String read(){
         try{
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            return in.readLine();
+            String tmp = "";
+            String line = "";
+            boolean b = true;
+
+            while((line = in.readLine()) != null && !line.equals("[-1")){
+                if(line == null) return null;
+                if(b) tmp = line;
+                else tmp = tmp + '\n' + line;
+                b = false;
+            }
+
+           // System.out.println(tmp);
+            return tmp;
+            /*String line = in.readLine();
+            System.out.println(line);
+            return line;*/
+
         }catch(IOException ex){
         }
         return null;

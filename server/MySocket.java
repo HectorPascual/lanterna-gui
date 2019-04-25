@@ -43,13 +43,29 @@ public class MySocket{
             out = new PrintWriter(socket.getOutputStream(), true);
         }catch(IOException ex){
         }
+        System.out.println(line);
         out.println(line);
     }
 
     public String read(){
         try{
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            return in.readLine();
+            String tmp = "";
+            String line = "";
+            boolean b = true;
+
+            while((line = in.readLine()) != null && !line.equals("[-1")){
+                if(b) tmp = line;
+                else tmp = tmp + '\n' + line;
+                b = false;
+            }
+            if(line == null) return null;
+            // System.out.println(tmp);
+            return tmp;
+            /*String line = in.readLine();
+            System.out.println(line);
+            return line;*/
+
         }catch(IOException ex){
         }
         return null;

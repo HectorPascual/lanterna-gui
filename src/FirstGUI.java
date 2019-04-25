@@ -136,7 +136,7 @@ public class FirstGUI {
 
     private void requestName() {
         name = TextInputDialog.showDialog(textGUI, "","Type your name (max 8 letters)","");
-        socket.write(name);
+        socket.write(name + "\n[-1");
     }
 
     private void sizeComponents() {
@@ -215,10 +215,11 @@ public class FirstGUI {
 
     private void sendAction(){
         String input = textBox.getText();
+
         if(!input.equals("")) {
-            socket.write(input);
+            socket.write(input + "\n[-1"); // [-1 indicates the end of message
             textBox.setText("");
-            write(input);
+            write("me : " + input);
 
         }
     }

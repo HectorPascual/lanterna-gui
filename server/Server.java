@@ -30,15 +30,15 @@ public class Server{
                   userlist = userlist + s + ",";
                 }
                 for(MySocket s : users.values()){
-                  s.write(userlist);
+                  s.write(userlist + '\n' + "[-1");
                   if(s != users.get(username)){
                     System.out.println("Sending " + username + "has join the chat to" + s.toString());
-                    s.write(username + " has join the chat");
+                    s.write(username + " has joined the chat" + '\n' + "[-1");
                   }
                 }
                 break;
               }
-              client.write("Nick already taken. Introduce another username");
+              client.write("Nick already taken. Introduce another username" + '\n' + "[-1");
               // it should not change the gui
             }
 
@@ -47,20 +47,20 @@ public class Server{
             while(true){
               if((line = users.get(username).read()) != null){
                 for(String s : users.keySet()){
-                  if(s != username) users.get(s).write(username + ": " + line);
+                  if(s != username) users.get(s).write(username + ": " + line + '\n' + "[-1");
                 }
               } else {
                 String modifyUsers = "$userlist,";
                 for(String s : users.keySet()){
                   if(s != username){
                     modifyUsers = modifyUsers + s + ",";
-                    users.get(s).write(username + " has left the chat");
+                    users.get(s).write(username + " has left the chat" +'\n' + "[-1");
                   }
                 }
                 users.remove(username);
                 for(MySocket s : users.values()){
                   System.out.println(modifyUsers);
-                  s.write(modifyUsers);
+                  s.write(modifyUsers + '\n' + "[-1");
                 }
                 break;
               }
