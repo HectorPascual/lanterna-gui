@@ -68,7 +68,6 @@ public class FirstGUI {
                     termRows = terminalSize.getRows();
                     sizeComponents();
                 }
-
             });
 
             requestName();

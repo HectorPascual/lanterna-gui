@@ -35,24 +35,4 @@ public class MyServerSocket extends ServerSocket {
         }
     }
 
-    // Maybe is not needed in the server
-
-  /*
-  public void write(Socket client, String text){
-    try{
-      printout = new PrintWriter(client.getOutputStream(), true);
-    }catch(IOException ex){
-    }
-    printout.println(text);
-  }
-
-  public String read(Socket client){
-    try{
-      in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-      return in.readLine();
-    }catch(IOException ex){
-    }
-    return null;
-  }
-  */
 }
